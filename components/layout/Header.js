@@ -40,7 +40,7 @@ const SubHeader = styled.div`
 `;
 
 const Header = () => {
-    const user = true
+    const user = true;
     return (
         <ContainerHeader>
 
@@ -63,11 +63,11 @@ const Header = () => {
                         </>)
                         :
                         (<>
-                            <Link href="/">
+                            <Link href="/login">
                                 <Button bgColor="true">Login</Button> 
                             </Link>
 
-                            <Link href="/">
+                            <Link href="/crear-cuenta">
                                 <Button>Crear Cuenta</Button>
                             </Link>
                         </>)
