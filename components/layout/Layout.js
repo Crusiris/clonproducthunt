@@ -13,6 +13,7 @@ const Layout = (props) => {
                    :root {
                        --grey:#3d3d3d;
                        --greytwo:#6f6f6f;
+                       --greythree:#E1E1E1;
                        --orange:#DA552F;
                    }
 
