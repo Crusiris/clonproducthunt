@@ -1,12 +1,13 @@
-import Head from 'next/head';
 import style from '@emotion/styled';
-
-const Heading = style.h1`
-color:red;
-`;
+import Layout from '../components/layout/Layout';
 
 export default function Home() {
   return (
-    <Heading>Hi word</Heading>
+    <div>
+        <Layout>
+          <h1>Inicio</h1>
+        </Layout>
+    </div>
+    
   );
 }
