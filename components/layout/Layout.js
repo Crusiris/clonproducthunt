@@ -14,7 +14,7 @@ const Layout = (props) => {
                        --grey:#3d3d3d;
                        --greytwo:#6f6f6f;
                        --greythree:#E1E1E1;
-                       --orange:#DA552F;
+                       --orange:rgb(204,77,41);
                    }
 
                    html {

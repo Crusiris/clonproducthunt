@@ -15,6 +15,7 @@ const Button = styled.a`
 
     &:hover{
         cursor:pointer;
+        color:#000;
     }
 `;
 
