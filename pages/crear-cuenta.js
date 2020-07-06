@@ -1,16 +1,34 @@
 import React from 'react';
 import Layout from '../components/layout/Layout';
-import { Form, Campo, Submit, TitleForm } from '../components/ui/Form';
+import { Form, Campo, Submit, TitleForm, Error } from '../components/ui/Form';
 
+//Validación
+import useValidation from '../hooks/useValidation';
+import validationCreateAccount from '../validation/validationCreateAccount';
 
+const state_initial ={
+    name:'',
+    email:'',
+    password:''
+}
 const CreateAccount = () => {
+  const { values, error, handleChange, handleBlur, handleSubmit } = useValidation(state_initial, validationCreateAccount, createCta)
+    
+  //Extrayendo valores del state values
+    const {name, email, password } = values
+
+   function createCta() {
+       console.log('creando cta');
+   }
     //TODO LO QUE ESTE POR FUERA DEL MAIN, PERO DENTRO DEL RETURN SE MOSTRARA EN TODOS LOS COMPONENTES
     return (
         <div>
             <Layout>
             <>
              <TitleForm>Crear cuenta</TitleForm>
-             <Form>
+             <Form
+             onSubmit={handleSubmit} noValidate
+             >
                  <Campo>
                      <label htmlFor="name">Nombre</label>
                      <input
@@ -18,19 +36,39 @@ const CreateAccount = () => {
                          id="name"
                          name="name"
                          placeholder="Tu nombre"
+                         value={name}
+                         onChange={handleChange}
+                         onBlur={handleBlur}
                      />
                  </Campo>
-
+                    {error.name && <Error>{error.name}</Error>}
                  <Campo>
-                     <label htmlFor="email">Nombre</label>
+                     <label htmlFor="email">Email</label>
                      <input
                          type="email"
                          id="email"
                          name="email"
                          placeholder="Tu Email"
+                         value={email}
+                         onChange={handleChange}
+                         onBlur={handleBlur}
                      />
                  </Campo>
+                 {error.email && <Error>{error.email}</Error>}
 
+                 <Campo>
+                     <label htmlFor="password">Password</label>
+                     <input
+                         type="password"
+                         id="password"
+                         name="password"
+                         placeholder="Tu password"
+                         value={password}
+                         onChange={handleChange}
+                         onBlur={handleBlur}
+                     />
+                 </Campo>
+                 {error.password && <Error>{error.password}</Error>}
                  <Submit
                      type="submit"
                      value="Crear Cuenta"

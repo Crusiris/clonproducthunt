@@ -1,46 +1,58 @@
 import React, { useState, useEffect } from 'react';
 
-const [state, setState] = useState([]);
-
-const useValidation = (stateInitial, validate, fn)=>{
+//Hooks Personalizado para manejar los formularios de la app
+const useValidation = (stateInitial, validate, fn) => {
     
-    const [value, setValue] = useState(stateInitial);
-    const [error, setError ] = useState({});
-    const [submitform, setSubmitform] = useState(false); 
+    const [values, setValues] = useState(stateInitial);//State para manejar los valores del formulario.
+    const [error, setError ] = useState({});//State para manejar los errores del formulario.
+    const [submitform, setSubmitform] = useState(false); //State que maneja el valor del submit
     
     useEffect(()=> {
-
+        //Si submitform es true, entonces verificamos que no existan errores
         if(submitform){
             const notError = Object.keys(error).length === 0;
 
-            //Si no hay errores, llamamos a la función
+            //Si no hay errores, llamamos a la función que se vaya a ejecutar
             if(notError){
                 fn();
             }
             setSubmitform(false);
         }
-    },[]);
 
-    //Funcion qu obtiene datos de input
+    },[error]);
+
+    //Funcion que obtiene datos de input
     const handleChange = e => {
-        setValue({
-            ...value,
+        setValues({
+            ...values,
             [e.target.name]:e.target.value
         })
     }
+
+    //Funcion con handleBlur
+    const handleBlur = () => {
+        //pasando los valores que introduce el usuario a la funcion validar [validatecreateaccount]
+        const errorValidation = validate(values);
+        //guardando los errores encontrado es el state de errores
+        setError(errorValidation);
+    }
+
     //Enviando datos
     const handleSubmit = e => {
         e.preventDefault();
-        const errorValidation = validate(value);
+        //pasando los valores que introduce el usuario a la funcion validar [validatecreateaccount]
+        const errorValidation = validate(values);
+        //guardando los errores encontrado es el state de errores
         setError(errorValidation);
         setSubmitform(true);
     }
 
     return{
-        value,
+        values,
         error,
         submitform,
         handleChange,
+        handleBlur,
         handleSubmit
     };
 }
