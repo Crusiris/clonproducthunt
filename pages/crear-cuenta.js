@@ -6,6 +6,9 @@ import { Form, Campo, Submit, TitleForm, Error } from '../components/ui/Form';
 import useValidation from '../hooks/useValidation';
 import validationCreateAccount from '../validation/validationCreateAccount';
 
+//Firebase
+import firebase from '../firebase';
+
 const state_initial ={
     name:'',
     email:'',
@@ -17,8 +20,12 @@ const CreateAccount = () => {
   //Extrayendo valores del state values
     const {name, email, password } = values
 
-   function createCta() {
-       console.log('creando cta');
+   async function createCta() {
+      try {
+          await  firebase.singIn(name, email, password);
+      } catch (error) {
+          console.log('Ocurrio un error', error);
+      }
    }
     //TODO LO QUE ESTE POR FUERA DEL MAIN, PERO DENTRO DEL RETURN SE MOSTRARA EN TODOS LOS COMPONENTES
     return (

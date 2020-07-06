@@ -1,3 +1,4 @@
+//Archivo con la configuracion de firebase
 const firebaseConfig = {
     apiKey: "AIzaSyBw_9cWedsRCNO1CHLaT-76z5FFfJJ4FRs",
     authDomain: "product-hunt-210c6.firebaseapp.com",
