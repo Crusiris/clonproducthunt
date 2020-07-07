@@ -38,6 +38,7 @@ export const Submit = styled.input`
     border:none;
     font-family:'PT Sans', sans-serif;
     font-weigth:700;
+    border-radius:0.3em;
 
     &:hover {
         cursor:pointer;

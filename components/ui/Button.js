@@ -4,10 +4,11 @@ const Button = styled.a`
     font-weight:700;
     text-transform:uppercase;
     border:1px solid #d1d1d1;
-    padding:.8rem 2rem;
+    padding:.4rem 2rem;
     margin-right:1rem;
     background-color: ${props => props.bgColor ? '#DA552F' : '#FFFFFF'};
     color: ${props => props.bgColor ? '#FFFFFF' : '#000'};
+    border-radius:0.3em;
 
     &:last-of-type {
         margin-right:0

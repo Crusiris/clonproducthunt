@@ -2,7 +2,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import firebaseConfig from './config';
-
+//Metodos de firebase
 class Firebase {
     constructor() {
         if(!app.apps.length){
@@ -25,6 +25,10 @@ class Firebase {
        return this.auth.signInWithEmailAndPassword(email, password);
     }
 
+    //Cerrar sesion
+    async signOff(){
+        return this.auth.signOut();
+    }
 
 }
 
