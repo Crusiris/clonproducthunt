@@ -1,6 +1,7 @@
 //Archivo que contiene la clase con los metodos de firebase
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 import firebaseConfig from './config';
 //Metodos de firebase
 class Firebase {
@@ -9,6 +10,7 @@ class Firebase {
             app.initializeApp(firebaseConfig)
         }
         this.auth = app.auth();
+        this.db = app.firestore();
     }
 
     //Registro
