@@ -11,13 +11,21 @@ class Firebase {
         this.auth = app.auth();
     }
 
-   async singIn(name, email, password){
+    //Registro
+   async singUp(name, email, password){
         const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
     
         return await newUser.user.updateProfile({
             displayName:name
         })
     }
+
+    //Inicio de sesion
+    async singIn(email, password){
+       return this.auth.signInWithEmailAndPassword(email, password);
+    }
+
+
 }
 
 const firebase = new Firebase();
