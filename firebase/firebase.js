@@ -10,8 +10,11 @@ class Firebase {
         if(!app.apps.length){
             app.initializeApp(firebaseConfig)
         }
+        //Autentificacion
         this.auth = app.auth();
+        //base de datos firestore
         this.db = app.firestore();
+        //bd para imagenes
         this.storage = app.storage();
     }
 
