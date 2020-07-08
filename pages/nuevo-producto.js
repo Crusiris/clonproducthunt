@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import Router, { useRouter } from 'next/router';
+import FileUploader from 'react-firebase-file-uploader';
 import Layout from '../components/layout/Layout';
 import { Form, Campo, Submit, TitleForm, Error } from '../components/ui/Form';
 
@@ -28,7 +29,43 @@ const NewProduct = () => {
 
   //State local
   const [ errorfire , seterrorFire ] = useState(false);
-  
+
+  //State para las imagenes
+  const [ nameimg, setNameimg ]=useState('');
+  const [ goingup, setGoingup ]= useState(false);
+  const [ progress, setProgress ]=useState(0);
+  const [ urlimage, setUrlimage ]=useState('');
+
+  //Funciones
+ 
+    const handleUploadStart = () => {
+        setProgress(0);
+        setGoingup(true);
+    }
+
+    const handleProgress = progreso => setProgress({ progreso });
+
+    const handleUploadError = error => {
+        setGoingup(error);
+        console.error(error);
+    };
+
+    const handleUploadSuccess = name => {
+        setProgress(100);
+        setGoingup(false);
+        setNameimg(name)
+        firebase
+            .storage
+            .ref("products")
+            .child(name)
+            .getDownloadURL()
+            .then(url => {
+            console.log(url);
+            setUrlimage(url);
+            } );
+    };
+
+
   //Context con las operaciones crud de firebase
   const { user, firebase }= useContext(FirebaseContext);
 
@@ -46,6 +83,7 @@ const NewProduct = () => {
          name,
          business,
          url,
+         urlimage,
          description,
          votes:0,
          comments:[],
@@ -53,7 +91,8 @@ const NewProduct = () => {
      }
 
      //Insertando datos en BD
-     firebase.db.collection('products').add(product)
+     firebase.db.collection('products').add(product);
+     return router.push('/');
    }
     //TODO LO QUE ESTE POR FUERA DEL MAIN, PERO DENTRO DEL RETURN SE MOSTRARA EN TODOS LOS COMPONENTES
     return (
@@ -97,19 +136,26 @@ const NewProduct = () => {
 
                     {error.business && <Error>{error.business}</Error>}
 
-                    {/* <Campo>
+                    <Campo>
                      <label htmlFor="imagen">Imagen</label>
-                     <input
+                     <FileUploader
+                         accept="image/*"
                          type="file"
                          id="image"
                          name="image"
-                         value={image}
-                         onChange={handleChange}
-                         onBlur={handleBlur}
+                        //  value={image}
+                        //  onChange={handleChange}
+                        //  onBlur={handleBlur}
+                         randomizeFilename
+                         storageRef={firebase.storage.ref("products")}
+                         onUploadStart={handleUploadStart}
+                         onUploadError={handleUploadError}
+                         onUploadSuccess={handleUploadSuccess}
+                         onProgress={handleProgress}
                      />
                     </Campo>
 
-                    {error.image && <Error>{error.image}</Error>} */}
+                    {error.image && <Error>{error.image}</Error>}
 
                     <Campo>
                      <label htmlFor="url">Url</label>
