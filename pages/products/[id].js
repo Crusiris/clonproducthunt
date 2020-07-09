@@ -5,7 +5,8 @@ import Error404 from '../../components/layout/404';
 import Comments from '../../components/layout/Comments';
 import Spinner from '../../components/layout/Spinner';
 import Layout from '../../components/layout/Layout';
-import { Campo, Submit } from '../../components/ui/Form'
+import { Campo, Submit } from '../../components/ui/Form';
+import Button from '../../components/ui/Button';
 import styled from '@emotion/styled';
 //Libreria para formatear la fecha
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -21,6 +22,14 @@ const ContainerProduct = styled.div`
         display:grid;
         grid-template-columns:2fr 1fr;
         colunm-gap:2rem;
+    }
+`;
+
+const ContainerVotes = styled.div`
+    margin-top:5rem;
+
+    p{
+        text-align:center;
     }
 `;
 
@@ -54,8 +63,8 @@ const Product = () => {
 
     if(Object.keys(product).length === 0) return <Spinner/>
 
-    const { name, comments, votes, urlimage, url, business, create, description }=product;
-     
+    const { name, comments, votes, urlimage, url, business, create, description, creator }=product;
+     const {namecreator} = creator;
 
     return (
         <>
@@ -68,6 +77,7 @@ const Product = () => {
                 <ContainerProduct>
                     <div>
                         <p>Publicado hace: { formatDistanceToNow(new Date(create), {locale:es}) }</p>
+                       <p>Publicado por {namecreator} de {business}</p>
                         <img src={urlimage}/>
                         <p>{description}</p>
 
@@ -93,7 +103,20 @@ const Product = () => {
                     </div>
                     
                     <aside>
-                        2
+                        <Button
+                            target="_blank"
+                            bgColor="true"
+                            href={url}
+                        >Visitar URL</Button>
+
+                        <ContainerVotes>
+                           <p>{votes} Votos</p>
+
+                           <Button>
+                               Votar
+                           </Button>
+
+                        </ContainerVotes>
                     </aside>
                 </ContainerProduct>
             </div>

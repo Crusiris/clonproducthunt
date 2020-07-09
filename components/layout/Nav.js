@@ -24,7 +24,7 @@ const Nav = () => {
         <Navbar>
             <Link href="/">Inicio</Link>
             <Link href="/populares">Populares</Link>
-            {user && <Link href="/nuevo-producto">Nuevo Producto</Link> }
+            {user && <Link href="/nuevoproducto">Nuevo Producto</Link> }
             
         </Navbar>
     );

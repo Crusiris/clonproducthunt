@@ -4,7 +4,7 @@ import FileUploader from 'react-firebase-file-uploader';
 import Layout from '../components/layout/Layout';
 import { Form, Campo, Submit, TitleForm, Error } from '../components/ui/Form';
 
-//Validación
+//Validación hooks
 import useValidation from '../hooks/useValidation';
 import validationCreateProduct from '../validation/validationCreateProduct';
 
@@ -22,7 +22,7 @@ const state_initial ={
 
 
 const NewProduct = () => {
-    //TODO LO QUE ESTE POR FUERA DEL MAIN, PERO DENTRO DEL RETURN SE MOSTRARA EN TODOS LOS COMPONENTES
+    //Hooks validate
     const { values, error, handleChange, handleBlur, handleSubmit } = useValidation(state_initial, validationCreateProduct, createProduct);
     //Extrayendo valores del state values
     const {name, business, image, url, description } = values
@@ -68,6 +68,7 @@ const NewProduct = () => {
 
   //Context con las operaciones crud de firebase
   const { user, firebase }= useContext(FirebaseContext);
+ 
 
   //Hook de routing para redireccionar
   const router = useRouter();
@@ -87,7 +88,12 @@ const NewProduct = () => {
          description,
          votes:0,
          comments:[],
-         create:Date.now()
+         create:Date.now(),
+         creator:{
+            id:user.uid,
+            namecreator:user.displayName
+         }
+         
      }
 
      //Insertando datos en BD
@@ -175,7 +181,7 @@ const NewProduct = () => {
                  </fieldset>
                  
                  <fieldset>
-                     <legend>Sobre tu Proyecto</legend>
+                     <legend>Sobre tu Producto</legend>
 
                      <Campo>
                      <label htmlFor="descripcion">Descripcion</label>
