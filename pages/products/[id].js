@@ -44,6 +44,7 @@ const Product = () => {
     //state locales
     const [ product, saveProduct ] = useState({});
     const [ error, setError ] = useState(false);
+    const [ commentary, setCommentary ]=useState({})
 
     useEffect(()=>{
         if(id){
@@ -91,6 +92,36 @@ const Product = () => {
          });
     }
 
+    const onChangecommentary = (e)=> {
+        setCommentary({
+            ...commentary,
+            [e.target.name]:e.target.value
+        })
+    }
+
+    const onsubmitcommentary = (e)=>{
+        e.preventDefault();
+
+        if(!user){
+            return router.push('/login');
+        }
+
+        //Informacion para el comentario
+        commentary.userid= user.uid;
+        commentary.username = user.displayName;
+
+        //copia de los comentarioss en base de datos y añadir el comentario
+        const newcommentary=[ ...comments,commentary ]
+        //Actualizar BD
+        firebase.db.collection('products').doc(id).update({comments:newcommentary})
+        //Actializar state
+        saveProduct({
+            ...product,
+            comments:newcommentary
+        })
+
+    }
+
     return (
         <>
          <Layout/>
@@ -109,11 +140,14 @@ const Product = () => {
                         {user &&
                             <>
                                 <h2>Agrega tu comentario</h2>
-                                <form>
+                                <form
+                                
+                                onSubmit={onsubmitcommentary}>
                                     <Campo>
                                         <input
                                             type="text"
                                             name="message"
+                                            onChange={onChangecommentary}
                                         />
                                     </Campo>
                                     <Submit
