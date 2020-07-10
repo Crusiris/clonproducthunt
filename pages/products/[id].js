@@ -39,7 +39,7 @@ const Product = () => {
     //destructuring
     const { query:{id} } = router;
     //Context de firebase
-    const { firebase } = useContext(FirebaseContext);
+    const { firebase, user } = useContext(FirebaseContext);
 
     //state locales
     const [ product, saveProduct ] = useState({});
@@ -81,25 +81,29 @@ const Product = () => {
                         <img src={urlimage}/>
                         <p>{description}</p>
 
-                        <h2>Agrega tu comentario</h2>
-                        <form>
-                            <Campo>
-                                <input
-                                    type="text"
-                                    name="message"
-                                />
-                            </Campo>
-                            <Submit
-                            type="submit"
-                            value="Agregar comentario"
-                            >
-                                
-                            </Submit>
+                        {user &&
+                            <>
+                                <h2>Agrega tu comentario</h2>
+                                <form>
+                                    <Campo>
+                                        <input
+                                            type="text"
+                                            name="message"
+                                        />
+                                    </Campo>
+                                    <Submit
+                                    type="submit"
+                                    value="Agregar comentario"
+                                    >
+                                        
+                                    </Submit>
 
-                            <h2>Comentarios</h2>
+                                    <h2>Comentarios</h2>
 
-                            <Comments comments={comments}/>
-                        </form>
+                                    <Comments comments={comments}/>
+                                </form>
+                            </>
+                        }
                     </div>
                     
                     <aside>
@@ -112,9 +116,11 @@ const Product = () => {
                         <ContainerVotes>
                            <p>{votes} Votos</p>
 
-                           <Button>
-                               Votar
-                           </Button>
+                           {user &&
+                                <Button>
+                                    Votar
+                                </Button>
+                           }
 
                         </ContainerVotes>
                     </aside>
