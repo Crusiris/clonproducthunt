@@ -9,6 +9,7 @@ import { Form, Campo, Submit, TitleForm, Error } from '../components/ui/Form';
 import useValidation from '../hooks/useValidation';
 import validationCreateProduct from '../validation/validationCreateProduct';
 
+
 //Firebase
 import firebase, { FirebaseContext } from '../firebase';
 
@@ -93,7 +94,8 @@ const NewProduct = () => {
          creator:{
             id:user.uid,
             namecreator:user.displayName
-         }
+         },
+        hasVoted:[]
          
      }
 
@@ -101,6 +103,8 @@ const NewProduct = () => {
      firebase.db.collection('products').add(product);
      return router.push('/');
    }
+
+  
     //TODO LO QUE ESTE POR FUERA DEL MAIN, PERO DENTRO DEL RETURN SE MOSTRARA EN TODOS LOS COMPONENTES
     return (
         <div>
@@ -123,7 +127,7 @@ const NewProduct = () => {
                             type="text"
                             id="name"
                             name="name"
-                            placeholder="Tu nombre"
+                            placeholder="Nombre del producto"
                             value={name}
                             onChange={handleChange}
                             onBlur={handleBlur}

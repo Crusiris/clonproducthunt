@@ -59,12 +59,37 @@ const Product = () => {
             }
             getProduct();
         }
-    },[id])
+    },[id, product]);
 
     if(Object.keys(product).length === 0) return <Spinner/>
 
-    const { name, comments, votes, urlimage, url, business, create, description, creator }=product;
-     const {namecreator} = creator;
+    const { name, comments, votes, urlimage, url, business, create, description, creator, hasVoted }=product;
+    const {namecreator} = creator;
+
+    //Funcion para manejar los votos
+    const votesProduct = ()=>{
+        if(!user){
+            return router.push('/login');
+        }
+
+         //obtener y sumar votos
+         const newTotal = votes + 1;
+
+        //Verificando si el usuario voto, entonces no puede volver a votar
+        if(hasVoted.includes(user.uid)) return;
+        
+        const newhasVoted = [...hasVoted, user.uid ];
+         //Actualizar con los nuevos votos y el usuario que voto base de datos
+         firebase.db.collection('products').doc(id).update({
+             votes:newTotal, 
+             hasVoted:newhasVoted
+            });
+         //Actualizar state
+         saveProduct({
+             ...product,
+             votes:newTotal
+         });
+    }
 
     return (
         <>
@@ -117,7 +142,9 @@ const Product = () => {
                            <p>{votes} Votos</p>
 
                            {user &&
-                                <Button>
+                                <Button
+                                onClick={votesProduct}
+                                >
                                     Votar
                                 </Button>
                            }
