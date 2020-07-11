@@ -1,34 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React from 'react';
 import Layout from '../components/layout/Layout';
 import Detailsproducts from '../components/layout/Detailsproducts';
-import { FirebaseContext } from '../firebase';
+import useProducts from '../hooks/useProducts';
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-  const { firebase } = useContext(FirebaseContext);
-
-  useEffect(()=>{
-    //Obtniendo data
-    const getProducts = ()=> {
-      //metodos de firebase para extraer su data
-      firebase.db.collection('products').onSnapshot(driveSnapshot)
-    }
-    getProducts();
-  }, []);
-
-  //Funcion que maneja el snapshot
-  function driveSnapshot(snapshot) {
-    const products = snapshot.docs.map(doc =>{
-      return {
-        //accedemos al id del documento de bd firestore
-        id:doc.id,
-        //accedemos a toda la data o registro del documento
-        ...doc.data()
-      }   
-    });
-    setProducts(products);
-  }
-
+  
+  const { products } = useProducts('create');
 
   return (
     <div>
