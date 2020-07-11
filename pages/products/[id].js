@@ -45,24 +45,27 @@ const Product = () => {
     const [ product, saveProduct ] = useState({});
     const [ error, setError ] = useState(false);
     const [ commentary, setCommentary ]=useState({})
+    const [consultbd, setConsultbd ]= useState(true);
 
     useEffect(()=>{
-        if(id){
+        if(id && consultbd){
             //Funcion que obtiene el producto de la bd segun el id
             const getProduct = async ()=> {
                 const productQuery = await firebase.db.collection('products').doc(id);
                 const product = await productQuery.get();
                 if(product.exists){
                     saveProduct(product.data());
+                    setConsultbd(false);
                 }else {
-                    setError(true)
+                    setError(true);
+                    setConsultbd(false);
                 }
             }
             getProduct();
         }
     },[id, product]);
 
-    if(Object.keys(product).length === 0) return <Spinner/>
+    if(Object.keys(product).length === 0 && !error) return <Spinner/>
 
     const { name, comments, votes, urlimage, url, business, create, description, creator, hasVoted }=product;
     const {namecreator} = creator;
@@ -90,6 +93,8 @@ const Product = () => {
              ...product,
              votes:newTotal
          });
+         //Consultar bd 
+         setConsultbd(true);
     }
 
     const onChangecommentary = (e)=> {
@@ -118,75 +123,124 @@ const Product = () => {
         saveProduct({
             ...product,
             comments:newcommentary
-        })
+        });
+        //Consultar bd 
+        setConsultbd(true);
 
+    }
+    //Verificando si el usuario es creador
+    const isCreator = id => {
+        if(creator.id === id){
+            return true;
+        }
+    }
+
+    //verificando si el usuario tiene permisos para eliminar el product
+    const accessAuth = ()=>{
+        if(!user) return false;
+
+        if (creator.id === user.uid){
+            return true
+        }
+    }
+
+    //Delete product
+    const deleteProduct = async ()=>{
+
+        if(!user){
+            return router.push('/login');
+        }
+
+        if(creator.id !== user.uid){
+            return router.push('/');
+        }
+
+        try {
+           await firebase.db.collection('products').doc(id).delete();
+           router.push('/');
+
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 
     return (
         <>
          <Layout/>
-            {error && <Error404/>}
+            {error ? <Error404/>
+            
+            :(
 
-            <div className="container">
-                <TitleProduct>{name}</TitleProduct>
 
-                <ContainerProduct>
-                    <div>
-                        <p>Publicado hace: { formatDistanceToNow(new Date(create), {locale:es}) }</p>
-                       <p>Publicado por {namecreator} de {business}</p>
-                        <img src={urlimage}/>
-                        <p>{description}</p>
+                <div className="container">
+                    <TitleProduct>{name}</TitleProduct>
 
-                        {user &&
-                            <>
-                                <h2>Agrega tu comentario</h2>
-                                <form
-                                
-                                onSubmit={onsubmitcommentary}>
-                                    <Campo>
-                                        <input
-                                            type="text"
-                                            name="message"
-                                            onChange={onChangecommentary}
-                                        />
-                                    </Campo>
-                                    <Submit
-                                    type="submit"
-                                    value="Agregar comentario"
+                    <ContainerProduct>
+                        <div>
+                            <p>Publicado hace: { formatDistanceToNow(new Date(create), {locale:es}) }</p>
+                        <p>Publicado por {namecreator} de {business}</p>
+                            <img src={urlimage}/>
+                            <p>{description}</p>
+
+                            {user &&
+                                <>
+                                    <h2>Agrega tu comentario</h2>
+                                    <form
+                                    
+                                    onSubmit={onsubmitcommentary}>
+                                        <Campo>
+                                            <input
+                                                type="text"
+                                                name="message"
+                                                onChange={onChangecommentary}
+                                            />
+                                        </Campo>
+                                        <Submit
+                                        type="submit"
+                                        value="Agregar comentario"
+                                        >
+                                            
+                                        </Submit>
+
+                                        <h2>Comentarios</h2>
+
+                                        <Comments comments={comments} isCreator={isCreator}/>
+                                    </form>
+                                </>
+                            }
+                        </div>
+                        
+                        <aside>
+                            <Button
+                                target="_blank"
+                                bgColor="true"
+                                href={url}
+                            >Visitar URL</Button>
+
+                            <ContainerVotes>
+                            <p>{votes} Votos</p>
+
+                            {user &&
+                                    <Button
+                                    onClick={votesProduct}
                                     >
-                                        
-                                    </Submit>
+                                        Votar
+                                    </Button>
+                            }
 
-                                    <h2>Comentarios</h2>
+                            </ContainerVotes>
+                        </aside>
+                    </ContainerProduct>
 
-                                    <Comments comments={comments}/>
-                                </form>
-                            </>
-                        }
-                    </div>
-                    
-                    <aside>
+                    {accessAuth() &&
                         <Button
-                            target="_blank"
-                            bgColor="true"
-                            href={url}
-                        >Visitar URL</Button>
+                        onClick={deleteProduct}
+                        >Eliminar Proyecto</Button>
+                    }
+                </div>
+            )}
 
-                        <ContainerVotes>
-                           <p>{votes} Votos</p>
-
-                           {user &&
-                                <Button
-                                onClick={votesProduct}
-                                >
-                                    Votar
-                                </Button>
-                           }
-
-                        </ContainerVotes>
-                    </aside>
-                </ContainerProduct>
-            </div>
         </>
     );
 }

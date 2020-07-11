@@ -27,10 +27,9 @@ const Login = () => {
         async function logIn() {
             try {
                 const user= await firebase.singIn(email, password);
-                console.log(user);
                 Router.push('/');
             } catch (error) {
-                console.log('Ocurrio un error', error.message);
+                //console.log('Ocurrio un error', error.message);
                 //Guardando error en el state local de errores
                 seterrorFire(error.message);
             }

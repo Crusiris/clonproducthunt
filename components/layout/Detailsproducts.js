@@ -90,8 +90,7 @@ const Image = styled.img`
 `;
 
 const Detailsproducts = ({product}) => {
-    console.log(product);
-
+    
     const {id, name, comments, votes, urlimage, url, business, create, description }=product;
 
     return (
