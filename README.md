@@ -7,4 +7,4 @@ Proyecto web basado en los funcionamientos basicos de Product Hunt, desarrollado
 
 
 
-**Este proyecto a sido creado con fines educativos**
+               **Este proyecto a sido creado con fines educativos**
