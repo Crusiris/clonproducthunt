@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Router, { useRouter } from 'next/router';
 import FileUploader from 'react-firebase-file-uploader';
 import Layout from '../components/layout/Layout';
@@ -69,11 +69,23 @@ const NewProduct = () => {
 
 
   //Context con las operaciones crud de firebase
-  const { user, firebase }= useContext(FirebaseContext);
+  const { user, firebase } = useContext(FirebaseContext);
  
-
+  console.log(user);
   //Hook de routing para redireccionar
   const router = useRouter();
+
+  useEffect(()=> {
+    if (!user){
+      const redirect = ()=>{
+        return router.push('/login');
+      }
+      redirect();
+    }
+    
+  },[user])
+
+  
 
 
    async function createProduct() {
@@ -109,7 +121,7 @@ const NewProduct = () => {
     return (
         <div>
             <Layout>
-            {!user ? <Error404/> : 
+            {user &&
              (
 
                 <>
