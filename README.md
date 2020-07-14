@@ -6,5 +6,4 @@ Proyecto web basado en los funcionamientos basicos de Product Hunt, desarrollado
 ![Imagen 1](https://github.com/Crusiris/clonproducthunt/blob/master/public/static/img/productHunt.jpg "Imagen A de la aplicacion")
 
 
-
-               **Este proyecto a sido creado con fines educativos**
+**Este proyecto a sido creado con fines educativos**
