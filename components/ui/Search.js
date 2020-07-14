@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Router from 'next/router';
 import styled from '@emotion/styled';
 
 const InputText = styled.input`
@@ -26,13 +27,34 @@ const BtnSubmit = styled.button`
    }
 `;
 
-const Form = styled.div`
+const Form = styled.form`
     position:relative;
 `;
 const Search = () => {
+
+    const [search, setSearch]= useState('');
+
+    const searchProductt = e => {
+        e.preventDefault()
+       
+        //Validando que el campo no este vacio
+        if(search.trim() === '') return;
+
+        //Redireccionar a la pantalla de busqueda
+        Router.push({
+            pathname:'/buscar',
+            query:{"q":search}
+        })
+
+        console.log('entro',search );
+    }
+
     return (
-        <Form>
+        <Form
+         onSubmit={searchProductt}
+        >
             <InputText type="text"
+                onChange={e => setSearch(e.target.value)}
                 placeholder="Buscar Productos"
             />
             <BtnSubmit type="submit">Buscar</BtnSubmit>
