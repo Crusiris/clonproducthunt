@@ -41,7 +41,7 @@ export const Campo = styled.div`
 
 export const Submit = styled.input`
     background-color: var(--orange);
-    width:100%;
+    width:95.5%;
     padding:1.5rem;
     text-align:center;
     color:#FFF;
@@ -59,7 +59,7 @@ export const Submit = styled.input`
 `;
 
 export const Error = styled.p`
-    background-color:red;
+    background-color:rgb(226,81,65);
     padding:1rem;
     font-family:'PT Sans', sans-serif;
     font-weigth:700;
